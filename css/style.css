@@ -1,0 +1,11 @@
+body {
+    background: #e0e0e0;
+}
+
+.calendar {
+    -moz-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.25);
+    -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.25);
+    margin: 50px auto;
+    display: table;
+}
+
