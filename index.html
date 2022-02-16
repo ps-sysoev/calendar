@@ -1,85 +1,84 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="css/style.css">
 
-    <title>Calendar</title>
+    <title>Календарь</title>
 </head>
 <body>
-<div class="calendar">
-    <div class="calendarHead">
-        <span class="leftButton" id="prev"> < </span>
-        <span class="leftSpace"></span>
-        <span class="monthYear" id="label"> February 2022 </span>
-        <span class="rightSpace"></span>
-        <span class="rightButton" id="next"> > </span>
-    </div>
+<div class="parent">
+    <div class="calendar">
+        <div class="calendarHead">
+            <span class="leftButton" id="prev"> < </span>
+            <span class="monthYear" id="label"> Февраль 2022 </span>
+            <span class="rightButton" id="next"> > </span>
+        </div>
 
-    <table class="calendarDays">
-        <td>Пн</td>
-        <td>Вт</td>
-        <td>Ср</td>
-        <td>Чт</td>
-        <td>Пт</td>
-        <td>Сб</td>
-        <td>Вс</td>
-    </table>
+        <div class="calendarGrid">
+            <table class="calendarGridDays">
+                <tbody>
+                <tr>
+                    <th>Пн</th>
+                    <th>Вт</th>
+                    <th>Ср</th>
+                    <th>Чт</th>
+                    <th>Пт</th>
+                    <th>Сб</th>
+                    <th>Вс</th>
+                </tr>
 
-    <div class="calendarGrid">
-        <table class="calendarGridDays">
-            <tbody>
-            <tr>
-                <td></td>
-                <td>1</td>
-                <td>2</td>
-                <td>3</td>
-                <td>4</td>
-                <td>5</td>
-                <td>6</td>
-            </tr>
-            <tr>
-                <td>7</td>
-                <td>8</td>
-                <td>9</td>
-                <td>10</td>
-                <td>11</td>
-                <td>12</td>
-                <td>13</td>
-            </tr>
-            <tr>
-                <td>14</td>
-                <td>15</td>
-                <td>16</td>
-                <td>17</td>
-                <td>18</td>
-                <td>19</td>
-                <td>20</td>
-            </tr>
-            <tr>
-                <td>21</td>
-                <td>22</td>
-                <td>23</td>
-                <td>24</td>
-                <td>25</td>
-                <td>26</td>
-                <td>27</td>
-            </tr>
-            <tr>
-                <td>28</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            </tbody>
-        </table>
+                <tr>
+                    <td></td>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>5</td>
+                    <td>6</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>8</td>
+                    <td>9</td>
+                    <td>10</td>
+                    <td>11</td>
+                    <td>12</td>
+                    <td>13</td>
+                </tr>
+                <tr>
+                    <td>14</td>
+                    <td>15</td>
+                    <td class="today">16</td>
+                    <td>17</td>
+                    <td>18</td>
+                    <td>19</td>
+                    <td>20</td>
+                </tr>
+                <tr>
+                    <td>21</td>
+                    <td>22</td>
+                    <td>23</td>
+                    <td>24</td>
+                    <td>25</td>
+                    <td>26</td>
+                    <td>27</td>
+                </tr>
+                <tr>
+                    <td>28</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
-
 
 <script src="js/app.js"></script>
 </body>

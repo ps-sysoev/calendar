@@ -2,10 +2,117 @@ body {
     background: #e0e0e0;
 }
 
+.parent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
 .calendar {
     -moz-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.25);
     -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.25);
     margin: 50px auto;
+    font: 55px/1.5 "Helvetica Neue", Helvatica, Arial, san-serif;
     display: table;
 }
 
+.calendar .calendarHead {
+    cursor: default;
+    background: #18af20;
+    background: -moz-linear-gradient(top, #05560a, #18af20);
+    background: -webkit-gradient(linear, left top, left bottom, from(#05560a), to(#18af20));
+    height: auto;
+    position: relative;
+    color: #fff;
+    -webkit-border-top-left-radius: 7px;
+    -webkit-border-top-right-radius: 7px;
+    -moz-border-radius-topleft: 7px;
+    -moz-border-radius-topright: 7px;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    font-weight: bold;
+    text-shadow: 0 -1px 0 #05560a;
+    text-transform: uppercase;
+}
+
+.calendar .calendarHead span {
+    display: inline-block;
+}
+
+.calendar .calendarHead .leftButton {
+    width: 40px;
+    text-align: center;
+    -webkit-border-top-left-radius: 5px;
+    -moz-border-radius-topleft: 5px;
+    border-top-left-radius: 5px;
+}
+
+.calendar .calendarHead .rightButton {
+    width: 40px;
+    text-align: center;
+    -webkit-border-top-right-radius: 5px;
+    -moz-border-radius-topright: 5px;
+    border-top-right-radius: 5px;
+}
+
+.calendar .calendarHead .leftButton:hover {
+    background: -moz-linear-gradient(top, #18af20, #05560a);
+    background: -webkit-gradient(linear, left top, left bottom, from(#18af20), to(#05560a));
+}
+
+.calendar .calendarHead .rightButton:hover {
+    background: -moz-linear-gradient(top, #18af20, #05560a);
+    background: -webkit-gradient(linear, left top, left bottom, from(#18af20), to(#05560a));
+}
+
+.calendar .calendarHead .monthYear {
+    width: auto;
+    text-align: center;
+}
+
+.calendar .calendarGridDays {
+    background: #fff;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.calendar td {
+    color: #2b2b2b;
+    width: auto;
+    height: auto;
+    text-align: center;
+    border: 1px solid #cecccc;
+    cursor: default;
+}
+
+.calendar .calendarGridDays th {
+    height: auto;
+    text-transform: uppercase;
+    font-size: 75%;
+    color: #9e9e9e;
+}
+
+.calendar .calendarGridDays td {
+    height: auto;
+    text-transform: uppercase;
+    font-size: 65%;
+    color: #9e9e9e;
+}
+
+.calendar .calendarGridDays td.today {
+    background: #e0dede;
+    box-shadow: 1px 1px 0 #fff inset;
+    -moz-box-shadow: 1px 1px 0 #fff inset;
+    -webkit-box-shadow: 1px 1px 0 #fff inset;
+}
+
+.calendar .calendarGridDays td:hover {
+    color: #fff;
+    text-shadow: #05560a 0 -1px;
+    background: #18af20;
+    background: -moz-linear-gradient(top, #05560a, #18af20);
+    background: -webkit-gradient(linear, left top, left bottom, from(#05560a), to(#18af20));
+    -moz-box-shadow: 0 0 0;
+    -webkit-box-shadow: 0 0 0;
+}
