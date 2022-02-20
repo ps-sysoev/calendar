@@ -17,7 +17,7 @@ body {
     display: table;
 }
 
-.calendar .calendarHead {
+.calendarHead {
     cursor: default;
     background: #18af20;
     background: -moz-linear-gradient(top, #05560a, #18af20);
@@ -34,44 +34,40 @@ body {
     font-weight: bold;
     text-shadow: 0 -1px 0 #05560a;
     text-transform: uppercase;
+    white-space: nowrap;
 }
 
-.calendar .calendarHead span {
+.calendarHead span {
     display: inline-block;
 }
 
-.calendar .calendarHead .leftButton {
-    width: 40px;
-    text-align: center;
-    -webkit-border-top-left-radius: 5px;
-    -moz-border-radius-topleft: 5px;
-    border-top-left-radius: 5px;
+.left {
+    -webkit-border-top-left-radius: 7px;
+    -moz-border-radius-topleft: 7px;
+    border-top-left-radius: 7px;
 }
 
-.calendar .calendarHead .rightButton {
+.right {
+    -webkit-border-top-right-radius: 7px;
+    -moz-border-radius-topright: 7px;
+    border-top-right-radius: 7px;
+}
+.button {
     width: 40px;
     text-align: center;
-    -webkit-border-top-right-radius: 5px;
-    -moz-border-radius-topright: 5px;
-    border-top-right-radius: 5px;
 }
 
-.calendar .calendarHead .leftButton:hover {
+.button:hover {
     background: -moz-linear-gradient(top, #18af20, #05560a);
     background: -webkit-gradient(linear, left top, left bottom, from(#18af20), to(#05560a));
 }
 
-.calendar .calendarHead .rightButton:hover {
-    background: -moz-linear-gradient(top, #18af20, #05560a);
-    background: -webkit-gradient(linear, left top, left bottom, from(#18af20), to(#05560a));
-}
-
-.calendar .calendarHead .monthYear {
+.monthYear {
     width: auto;
     text-align: center;
 }
 
-.calendar .calendarGridDays {
+.calendarGridDays {
     background: #fff;
     width: 100%;
     border-collapse: collapse;
@@ -86,28 +82,28 @@ body {
     cursor: default;
 }
 
-.calendar .calendarGridDays th {
+.calendarGridDays th {
     height: auto;
     text-transform: uppercase;
     font-size: 75%;
     color: #9e9e9e;
 }
 
-.calendar .calendarGridDays td {
+.calendarGridDays td {
     height: auto;
     text-transform: uppercase;
     font-size: 65%;
     color: #9e9e9e;
 }
 
-.calendar .calendarGridDays td.today {
+.calendarGridDays td.today {
     background: #e0dede;
     box-shadow: 1px 1px 0 #fff inset;
     -moz-box-shadow: 1px 1px 0 #fff inset;
     -webkit-box-shadow: 1px 1px 0 #fff inset;
 }
 
-.calendar .calendarGridDays td:hover {
+.calendarGridDays td:not(.empty):hover {
     color: #fff;
     text-shadow: #05560a 0 -1px;
     background: #18af20;
