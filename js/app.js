@@ -69,7 +69,8 @@
       } else {
         td.innerText = item;
 
-        if (item === currentDate.getDate() && selectedDate.getMonth() === currentDate.getMonth()) {
+        if (item === currentDate.getDate() && selectedDate.getMonth() === currentDate.getMonth()
+          && selectedDate.getFullYear() === currentDate.getFullYear()) {
           td.className = 'today';
         }
       }
