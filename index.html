@@ -11,16 +11,15 @@
 <div class="parent">
     <div class="calendar">
         <div class="calendarHead">
-            <span class="left button" id="prev" onclick="prev()"> < </span>
-            <span class="monthYear" id="label"></span>
-            <span class="right button" id="next" onclick="next()"> > </span>
-
+            <div class="left button"> < </div>
+            <div class="monthYear" title="Для смены языка кликните."></div>
+            <div class="right button"> > </div>
         </div>
 
         <div class="calendarGrid">
             <table class="calendarGridDays">
-                <tbody>
-                <tr id="weekday">
+                <thead>
+                <tr class="weekday">
                     <th>Пн</th>
                     <th>Вт</th>
                     <th>Ср</th>
@@ -29,6 +28,9 @@
                     <th>Сб</th>
                     <th>Вс</th>
                 </tr>
+                </thead>
+
+                <tbody>
 
                 </tbody>
             </table>

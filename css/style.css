@@ -1,5 +1,7 @@
 body {
     background: #e0e0e0;
+    font: 3.5em/1.5 "Helvetica Neue", Helvatica, Arial, san-serif;
+    user-select: none;
 }
 
 .parent {
@@ -12,16 +14,14 @@ body {
 .calendar {
     -moz-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.25);
     -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.25);
-    margin: 50px auto;
-    font: 55px/1.5 "Helvetica Neue", Helvatica, Arial, san-serif;
-    display: table;
+    display: inline-block;
+    width: 550px;
 }
 
 .calendarHead {
-    cursor: default;
+    cursor: pointer;
     background: #18af20;
-    background: -moz-linear-gradient(top, #05560a, #18af20);
-    background: -webkit-gradient(linear, left top, left bottom, from(#05560a), to(#18af20));
+    background: linear-gradient(#05560a, #18af20);
     height: auto;
     position: relative;
     color: #fff;
@@ -35,10 +35,14 @@ body {
     text-shadow: 0 -1px 0 #05560a;
     text-transform: uppercase;
     white-space: nowrap;
+    margin: auto;
+    display: flex;
 }
 
-.calendarHead span {
-    display: inline-block;
+.button {
+    width: 7%;
+    text-align: center;
+    outline: none;
 }
 
 .left {
@@ -47,24 +51,20 @@ body {
     border-top-left-radius: 7px;
 }
 
+.monthYear {
+    text-align: center;
+    width: 86%;
+}
+
 .right {
     -webkit-border-top-right-radius: 7px;
     -moz-border-radius-topright: 7px;
     border-top-right-radius: 7px;
 }
-.button {
-    width: 40px;
-    text-align: center;
-}
 
 .button:hover {
     background: -moz-linear-gradient(top, #18af20, #05560a);
     background: -webkit-gradient(linear, left top, left bottom, from(#18af20), to(#05560a));
-}
-
-.monthYear {
-    width: auto;
-    text-align: center;
 }
 
 .calendarGridDays {
@@ -106,9 +106,52 @@ body {
 .calendarGridDays td:not(.empty):hover {
     color: #fff;
     text-shadow: #05560a 0 -1px;
-    background: #18af20;
-    background: -moz-linear-gradient(top, #05560a, #18af20);
-    background: -webkit-gradient(linear, left top, left bottom, from(#05560a), to(#18af20));
+    background: linear-gradient(#05560a, #18af20);
     -moz-box-shadow: 0 0 0;
     -webkit-box-shadow: 0 0 0;
 }
+
+.calendarGridDays tbody tr:nth-child(odd) {
+    background-color: #f3ffe5;
+}
+
+.weekday {
+    background-color: #e8e8e8;
+    white-space: nowrap;
+}
+
+/* CSS @media запросы, ориентируемся на размеры:
+ 320 px — Мобильные устройства (портретная ориентация);
+ 480 px — Мобильные устройства (альбомная ориентация);
+ 600 px — Небольшие планшеты;
+ 768 px — Планшеты (портретная ориентация);
+ 1024 px — Планшеты (альбомная ориентация)/Нетбуки;
+ 1280 px и более — PC.
+*/
+
+@media (max-width: 320px) or (max-height: 320px) {
+    body {
+        font-size: 2.0em;
+    }
+}
+
+@media (min-width: 321px) and (max-width: 480px) {
+    body {
+        font-size: 2.5em;
+    }
+}
+
+@media (min-height: 321px) and (max-height: 375px)  {
+    body {
+        font-size: 2.5em;
+    }
+}
+
+@media (min-height: 376px) and (max-height: 428px) {
+    body {
+        font-size: 2.5em;
+    }
+}
+
+
+
