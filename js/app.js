@@ -1,56 +1,68 @@
-// IIFE
-(function () {
-
-  // начальная инициализация календаря
+(function IIFE() {
+  // ==========================================================================================================
+  // инициализация начального состояния календаря
+  // ==========================================================================================================
   function init(selectedDate) {
-    // количество дней в неделе
-    const countOfDaysInWeek = 7;
-
-    // текуая дата
-    const currentDate = new Date();
-
     // выделяем из полученный даты месяц и год
-    const optionsOfDate = {
-      year: 'numeric',
-      month: 'long'
-    };
+    {
+      const optionsOfDate = {
+        year: 'numeric',
+        month: 'long'
+      };
 
-    const date = selectedDate.toLocaleString('ru-RU', optionsOfDate);
+      const date = selectedDate.toLocaleString('ru-RU', optionsOfDate);
 
-    // находим ноду для вывода текущего месяца и выводим
-    document.querySelector('.monthYear').innerText = date.replace(' г.', '');
+      // находим ноду для вывода текущего месяца и выводим
+      const nodeMonthYear = document.querySelector('.monthYear');
+      nodeMonthYear.innerText = date.replace(' г.', '');
+    }
 
-    // определяем количество дней в текущем месяце
-    const numberOfDaysInMonth = 33 - new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 33).getDate();
+    // определяем количество дней в переданной дате - selectedDate
+    const numberOfDaysInMonth = getCountOfDaysInMonth.call(selectedDate);
 
-    // формируем дату - первый день текущего месяца
+    // определяем первый день в переданной дате - selectedDate
     const firstDayOfCurrentMonthInEnWeek = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1).getDay() - 1;
     const firstDayOfCurrentMonthInRuWeek = firstDayOfCurrentMonthInEnWeek < 0 ? 6 : firstDayOfCurrentMonthInEnWeek;
 
-    // таблица для формирования дней месяца
+    // ==========================================================================================================
+    // формируем данные для таблицы дней текущего периода/месяца
     const daysOfMonth = Array(42).fill(0);
 
-    // формируем данные для таблицы дней месяца
     for (let i = firstDayOfCurrentMonthInRuWeek; i - firstDayOfCurrentMonthInRuWeek < numberOfDaysInMonth; i++) {
       daysOfMonth[i] = i - firstDayOfCurrentMonthInRuWeek + 1;
     }
 
-    // считаем количество строк(недель) для формирования таблицы дней
-    const intermediateDataForDaysOfMonthTable = firstDayOfCurrentMonthInRuWeek + numberOfDaysInMonth;
-    let countOfWeeks = Math.floor(intermediateDataForDaysOfMonthTable / countOfDaysInWeek);
+    // заполняем дни следующего периода
+    {
+      let numberOfNextPeriod = 1;
 
-    if (intermediateDataForDaysOfMonthTable % countOfDaysInWeek) {
-      countOfWeeks++;
+      // '.' - используем как признак что это число не текущего периода
+      for (let i = firstDayOfCurrentMonthInRuWeek + numberOfDaysInMonth; i < daysOfMonth.length; i++) {
+        daysOfMonth[i] = numberOfNextPeriod + '.';
+        numberOfNextPeriod++;
+      }
     }
 
-    // "отрезаем" бесполезные ячейки
-    daysOfMonth.length = countOfWeeks * countOfDaysInWeek;
+    // заполняем дни предыдущего периода
+    {
+      const tempDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() - 1, 1);
+      const numberOfPreviousPeriod = getCountOfDaysInMonth.call(tempDate);
+
+      for (let i = 0; i < firstDayOfCurrentMonthInRuWeek; i++) {
+        daysOfMonth[i] = numberOfPreviousPeriod - firstDayOfCurrentMonthInRuWeek + 1 + i + '.';
+      }
+    }
+
+    const inputTextDateNode = document.querySelector('.inputTextDate');
 
     // находим ноду тела таблицы
     const tbodyNode = document.querySelector('table tbody');
 
     // заполняем дни в таблице
     let tr;
+    const countOfDaysInWeek = 7;
+    const currentDate = new Date();
+
     daysOfMonth.forEach((item, i) => {
       const step = i + 1;
 
@@ -63,11 +75,13 @@
       // формируем ячейку
       const td = document.createElement('td');
 
-      if (item === 0) {
-        td.innerText = '';
-        td.className = 'empty';
+      const strItem = String(item);
+      if (strItem.endsWith('.')) {
+        td.innerText = strItem.slice(0, strItem.length - 1);
+        td.className = 'anotherPeriod';
       } else {
         td.innerText = item;
+        td.addEventListener('click', clickedDate.bind(null, inputTextDateNode, selectedDate));
 
         if (item === currentDate.getDate() && selectedDate.getMonth() === currentDate.getMonth()
           && selectedDate.getFullYear() === currentDate.getFullYear()) {
@@ -79,9 +93,16 @@
     })
   }
 
-  // -------------------------------------------------------------------------
+  // ==========================================================================================================
+  // определение количество дней в месяце
+  // ==========================================================================================================
+  function getCountOfDaysInMonth() {
+    return 33 - new Date(this.getFullYear(), this.getMonth(), 33).getDate();
+  }
 
+  // ==========================================================================================================
   // очистка таблицы дней
+  // ==========================================================================================================
   function clearTable() {
     const node = document.querySelector('table');
 
@@ -91,13 +112,9 @@
     }
   }
 
-  // получаем текущую дату
-  let selectedDate = new Date();
-
-  // инициализация календаря
-  init(selectedDate);
-
+  // ==========================================================================================================
   // установка нового периода календаря (предыдущий/следующий)
+  // ==========================================================================================================
   function setNewCalendarPeriod(event) {
     if (event.target.className === 'left button') {
       selectedDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() - 1, 1);
@@ -110,6 +127,26 @@
     init(selectedDate);
   }
 
+  // ==========================================================================================================
+  // Вывод выбранного (кликнутого) числа
+  // ==========================================================================================================
+  function clickedDate(node, date) {
+    node.value = date.getDate() + '/' + date.getMonth() + '/' + date.getFullYear();
+    console.log(node);
+    console.log(date);
+  }
+
+  // ==========================================================================================================
+  // ОСНОВНОЙ БЛОК
+  // ==========================================================================================================
+
+  // получаем текущую дату
+  let selectedDate = new Date();
+
+  // инициализация календаря
+  init(selectedDate);
+
+  // вышаем обработчик нажатия предыдущий/следующий период
   const leftButton = document.querySelector('.left');
   leftButton.addEventListener('click', setNewCalendarPeriod);
 
