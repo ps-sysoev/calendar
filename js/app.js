@@ -2,32 +2,30 @@
   // ==========================================================================================================
   // формируем заголовок календаря
   // ==========================================================================================================
-  function createCalendarTitle() {
+  function createCalendarTitle(dateValue) {
     const optionsOfDate = {
       year: 'numeric',
       month: 'long'
     };
 
-    const date = selectedDate.toLocaleString('ru-RU', optionsOfDate);
-
-    // находим ноду для вывода текущего месяца и выводим
+    const date = dateValue.toLocaleString('ru-RU', optionsOfDate);
     nodeMonthYear.innerText = date.replace(' г.', '');
   }
 
   // ==========================================================================================================
   // формируем таблицу дней
   // ==========================================================================================================
-  function createCalendarDaysTable() {
+  function createCalendarDaysTable(dateValue) {
     // определяем количество дней в переданной дате selectedDate
-    const numberOfDaysInMonth = getCountOfDaysInMonth.call(selectedDate);
+    const numberOfDaysInMonth = getCountOfDaysInMonth.call(dateValue);
 
     // определяем первый день на неделе
-    const firstDayOfCurrentMonthInEnWeek = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1).getDay() - 1;
+    const firstDayOfCurrentMonthInEnWeek = new Date(dateValue.getFullYear(), dateValue.getMonth(), 1).getDay() - 1;
     const firstDayOfCurrentMonthInRuWeek = firstDayOfCurrentMonthInEnWeek < 0 ? 6 : firstDayOfCurrentMonthInEnWeek;
 
     // заполняем в daysOfMonth дни предыдущего периода
     {
-      const tempDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() - 1, 1);
+      const tempDate = new Date(dateValue.getFullYear(), dateValue.getMonth() - 1, 1);
       const numberOfPreviousPeriod = getCountOfDaysInMonth.call(tempDate);
 
       for (let i = 0; i < firstDayOfCurrentMonthInRuWeek; i++) {
@@ -56,7 +54,7 @@
   // ==========================================================================================================
   // заполняем дни в таблице
   // ==========================================================================================================
-  function fillInCalendarDaysTable() {
+  function fillInCalendarDaysTable(dateValue) {
     let tr;
     const countOfDaysInWeek = 7;
     const currentDate = new Date();
@@ -80,11 +78,11 @@
       } else {
         td.innerText = item;
         td.addEventListener('click', () => {
-          inputTextDateNode.value = item + '/' + (selectedDate.getMonth() + 1) + '/' + selectedDate.getFullYear();
+          inputTextDateNode.value = item + '/' + (dateValue.getMonth() + 1) + '/' + dateValue.getFullYear();
         });
 
-        if (item === currentDate.getDate() && selectedDate.getMonth() === currentDate.getMonth()
-          && selectedDate.getFullYear() === currentDate.getFullYear()) {
+        if (item === currentDate.getDate() && dateValue.getMonth() === currentDate.getMonth()
+          && dateValue.getFullYear() === currentDate.getFullYear()) {
           td.className = 'today';
         }
       }
@@ -96,12 +94,12 @@
   // ==========================================================================================================
   // инициализация начального состояния календаря
   // ==========================================================================================================
-  function createCalendar() {
-    createCalendarTitle();
+  function createCalendar(dateValue) {
+    createCalendarTitle(dateValue);
 
-    createCalendarDaysTable();
+    createCalendarDaysTable(dateValue);
 
-    fillInCalendarDaysTable();
+    fillInCalendarDaysTable(dateValue);
   }
 
   // ==========================================================================================================
@@ -133,7 +131,14 @@
 
     clearTable();
 
-    createCalendar();
+    createCalendar(selectedDate);
+  }
+
+  // ==========================================================================================================
+  // Выпадающий список Dropdown
+  // ==========================================================================================================
+  function showDropdown() {
+    document.querySelector('.dropdown-content').classList.toggle("show");
   }
 
   // ==========================================================================================================
@@ -143,17 +148,19 @@
   // массив для формирования таблицы дней
   const daysOfMonth = Array(42).fill(0);
 
+  // находим заголовок
+  const nodeMonthYear = document.querySelector('.monthYear');
+
   // находим table
   const nodeTable = document.querySelector('table');
+
+  console.log(nodeTable.parentElement)
 
   // определяем table tbody
   const tbodyNode = nodeTable.lastElementChild;
 
   // находим input
   const inputTextDateNode = document.querySelector('.inputTextDate');
-
-  // находим заголовок
-  const nodeMonthYear = document.querySelector('.monthYear');
 
   // получаем текущую дату
   let selectedDate = new Date();
@@ -162,9 +169,28 @@
   createCalendar(selectedDate);
 
   // вешаем обработчик нажатия предыдущий/следующий период
-  const leftButton = document.querySelector('.left');
-  leftButton.addEventListener('click', setNewCalendarPeriod);
+  {
+    const leftButton = document.querySelector('.left');
+    leftButton.addEventListener('click', setNewCalendarPeriod);
 
-  const rightButton = document.querySelector('.right');
-  rightButton.addEventListener('click', setNewCalendarPeriod);
+    const rightButton = document.querySelector('.right');
+    rightButton.addEventListener('click', setNewCalendarPeriod);
+  }
+
+  // меню dropdown
+  {
+    const nodeDropdown = document.querySelector('.dropdown');
+    nodeDropdown.addEventListener('click', showDropdown);
+
+    // закрыть раскрывающийся список, если пользователь кликнет за его пределами
+    window.onclick = function (event) {
+      if (!event.target.matches('.dropButton')) {
+        const myDropdown = document.querySelector('.dropdown-content');
+
+        if (myDropdown.classList.contains('show')) {
+          myDropdown.classList.remove('show');
+        }
+      }
+    }
+  }
 })()
