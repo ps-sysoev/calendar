@@ -8,7 +8,7 @@
       month: 'long'
     };
 
-    const date = dateValue.toLocaleString('ru-RU', optionsOfDate);
+    const date = dateValue.toLocaleString('ru', optionsOfDate);
     nodeMonthYear.innerText = date.replace(' г.', '');
   }
 
@@ -127,6 +127,11 @@
       selectedDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() - 1, 1);
     } else if (event.target.className === 'right button') {
       selectedDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 1);
+    } else if (event.target.className === 'dropdownItem') {
+      selectedDate = new Date(
+        Number(event.target.id.split('.')[1]),
+        Number(event.target.id.split('.')[0]) - 1,
+        1);
     }
 
     clearTable();
@@ -138,7 +143,66 @@
   // Выпадающий список Dropdown
   // ==========================================================================================================
   function showDropdown() {
-    document.querySelector('.dropdown-content').classList.toggle("show");
+    const dateValue = selectedDate;
+    const listOfMonthsAndYears = [];
+
+    let monthNumber = 0;
+    const currentMonthNumber = dateValue.getMonth();
+    const currentYearNumber = dateValue.getFullYear();
+
+    console.log(currentMonthNumber, ' : ', currentYearNumber);
+
+    {
+      for (let i = (5 - currentMonthNumber); i <= 11; i++, monthNumber++) {
+        listOfMonthsAndYears[i] =
+          {
+            month: monthNumber,
+            year: currentYearNumber
+          };
+      }
+
+      for (let i = 0; i <= 11 - monthNumber; i++) {
+        listOfMonthsAndYears[i] =
+          {
+            month: monthNumber + i,
+            year: currentYearNumber - 1
+          };
+      }
+    }
+    console.log(listOfMonthsAndYears);
+
+    const nodeDropdownContent = document.querySelector('.dropdown-content');
+
+    while (nodeDropdownContent.firstChild) {
+      nodeDropdownContent.removeChild(nodeDropdownContent.firstChild);
+    }
+
+    nodeDropdownContent.classList.toggle("show");
+
+    listOfMonthsAndYears.forEach((item) => {
+      const tempDate = new Date();
+      tempDate.setMonth(item.month);
+
+      const nodeTagA = document.createElement('a');
+      nodeTagA.href = '#';
+      nodeTagA.id = item.month + 1 + '.' + item.year;
+      nodeTagA.className = 'dropdownItem'
+      nodeTagA.innerHTML =
+        tempDate.toLocaleString('ru', {month: 'long'})
+          .replace(' г.', '')
+          .toUpperCase()
+        + ' ' + item.year;
+
+      if (item.month === currentMonthNumber && item.year === currentYearNumber) {
+        nodeTagA.className = 'dropdownToday';
+      }
+
+      nodeTagA.addEventListener('click', (event) => {
+        setNewCalendarPeriod(event);
+      })
+
+      nodeDropdownContent.appendChild(nodeTagA);
+    });
   }
 
   // ==========================================================================================================
@@ -154,7 +218,7 @@
   // находим table
   const nodeTable = document.querySelector('table');
 
-  console.log(nodeTable.parentElement)
+  // console.log(nodeTable.parentElement)
 
   // определяем table tbody
   const tbodyNode = nodeTable.lastElementChild;
