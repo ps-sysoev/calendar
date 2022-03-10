@@ -145,39 +145,48 @@
   function showDropdown() {
     const dateValue = selectedDate;
     const listOfMonthsAndYears = [];
-
-    let monthNumber = 0;
     const currentMonthNumber = dateValue.getMonth();
     const currentYearNumber = dateValue.getFullYear();
 
-    console.log(currentMonthNumber, ' : ', currentYearNumber);
-
     {
-      for (let i = (5 - currentMonthNumber); i <= 11; i++, monthNumber++) {
+      let monthNumber = currentMonthNumber;
+      let yearNumber = currentYearNumber;
+
+      for (let i = 5; i <= 11; i++, monthNumber++) {
+        if (monthNumber > 11) {
+          monthNumber = 0;
+          yearNumber++;
+        }
+
         listOfMonthsAndYears[i] =
           {
             month: monthNumber,
-            year: currentYearNumber
+            year: yearNumber
           };
       }
 
-      for (let i = 0; i <= 11 - monthNumber; i++) {
+      monthNumber = currentMonthNumber - 1;
+      yearNumber = currentYearNumber;
+
+      for (let i = 4; i >= 0; i--, monthNumber--) {
+        if (monthNumber < 0) {
+          monthNumber = 11;
+          yearNumber--;
+        }
+
         listOfMonthsAndYears[i] =
           {
-            month: monthNumber + i,
-            year: currentYearNumber - 1
+            month: monthNumber,
+            year: yearNumber
           };
       }
     }
-    console.log(listOfMonthsAndYears);
 
     const nodeDropdownContent = document.querySelector('.dropdown-content');
 
     while (nodeDropdownContent.firstChild) {
       nodeDropdownContent.removeChild(nodeDropdownContent.firstChild);
     }
-
-    nodeDropdownContent.classList.toggle("show");
 
     listOfMonthsAndYears.forEach((item) => {
       const tempDate = new Date();
@@ -203,6 +212,8 @@
 
       nodeDropdownContent.appendChild(nodeTagA);
     });
+
+    nodeDropdownContent.classList.toggle("show");
   }
 
   // ==========================================================================================================
