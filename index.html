@@ -14,9 +14,9 @@
   <div class="calendar">
 
     <div class="calendarHead">
-      <div class="left button"> <</div>
+      <div class="left button" data-clicked-button="left"> < </div>
       <div class="monthYear dropButton dropdown"></div>
-      <div class="right button"> ></div>
+      <div class="right button" data-clicked-button="right"> > </div>
     </div>
 
     <div class="dropdown-content dropdown">
@@ -42,18 +42,9 @@
     </div>
   </div>
 
-  <div class="textDate">
-    <p>
-      <b>Выбранная дата:</b>
-      <label>
-        <input class="inputTextDate" type="text" size="15" placeholder="не выбрана" readonly>
-      </label>
-    </p>
-  </div>
-
   <div class="datePeriod">
     <p>
-      <b>Период:</b>
+      <b>Выбранный период:</b>
       <label>
         <b>с</b>
         <input class="startDatePeriod" type="text" size="15" placeholder="не выбрано" readonly>
@@ -62,6 +53,10 @@
       <label>
         <b>по</b>
         <input class="endDatePeriod" type="text" size="15" placeholder="не выбрано" readonly>
+      </label>
+
+      <label>
+        <button class="clearingPeriod">x</button>
       </label>
     </p>
   </div>
