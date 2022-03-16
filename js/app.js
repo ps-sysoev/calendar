@@ -51,6 +51,19 @@
   }
 
   // ==========================================================================================================
+  //
+  // ==========================================================================================================
+  function setPeriod(item, dateValue, td, i) {
+    let period = [];
+
+    period[i] = 1;
+
+    startDatePeriod.value = item + '/' + (dateValue.getMonth() + 1) + '/' + dateValue.getFullYear();
+
+    td.classList.toggle("selectedTd");
+  }
+
+  // ==========================================================================================================
   // заполняем таблицу дней
   // ==========================================================================================================
   function fillInCalendarDaysTable(dateValue) {
@@ -76,11 +89,8 @@
         td.className = 'anotherPeriod';
       } else {
         td.innerText = item;
-        td.addEventListener('click', function (event) {
-          startDatePeriod.value = item + '/' + (dateValue.getMonth() + 1) + '/' + dateValue.getFullYear();
-          td.classList.toggle("selectedTd");
-
-          console.log(event);
+        td.addEventListener('click', () => {
+          setPeriod(item, dateValue, td, i);
         });
 
         if (item === currentDate.getDate() && dateValue.getMonth() === currentDate.getMonth()
@@ -224,23 +234,18 @@
   // Очистка выбранного периода
   // ==========================================================================================================
   function clearingSelectedPeriod() {
-    startDatePeriod.value = '';
-    startDatePeriod.ariaPlaceholder = 'не выбрано';
+    document
+      .querySelectorAll('.selectedTd')
+      .forEach(item => item.classList.toggle('selectedTd'));
 
-    endDatePeriod.value = '';
-    endDatePeriod.ariaPlaceholder = 'не выбрано';
+    startDatePeriod.value = endDatePeriod.value = '';
+    startDatePeriod.ariaPlaceholder = endDatePeriod.ariaPlaceholder = 'не выбрано';
 
-    // console.log('очистили выбранный период...')
   }
 
   // ==========================================================================================================
   // ОСНОВНОЙ БЛОК
   // ==========================================================================================================
-
-  const selectedStartDay = {
-    previousState: '',
-    currentState: ''
-  };
 
   // массив для формирования таблицы дней
   const daysOfMonth = Array(42).fill(0);

@@ -132,8 +132,7 @@ body {
 }
 
 .selectedTd {
-  background-color: #18af20;
-  color: #18af20;
+  background: linear-gradient(#05560a, #18af20);
 }
 
 /* CSS @media запросы, ориентируемся на размеры:
