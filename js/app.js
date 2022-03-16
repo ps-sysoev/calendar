@@ -51,16 +51,55 @@
   }
 
   // ==========================================================================================================
-  //
+  // формируем и отображаем выбранный период
   // ==========================================================================================================
-  function setPeriod(item, dateValue, td, i) {
-    let period = [];
+  function setSelectedPeriod(item, dateValue, td, i) {
+    const periodLength = period.length;
 
-    period[i] = 1;
+    if (periodLength > 1) {
+      const beginPeriod = period[0];
+      const endPeriod = period[periodLength - 1];
+
+      if (item < beginPeriod || item > endPeriod) {
+        const node = tbodyNode.getElementsByTagName('td');
+
+        // console.log(node);
+
+
+        for (let i = 0; i < node.length; i++) {
+
+          if (node.item(i).className !== 'anotherPeriod') {
+            const index = node.item(i).innerHTML;
+
+            if (index >= beginPeriod && index <= endPeriod) {
+              node.item(i).classList.add('selectedTd');
+            }
+
+
+            // console.log(node.item(i).innerHTML);
+          }
+        }
+
+
+        // console.log('увеличение периода..');
+      } else {
+        // console.log('период остается прежним..');
+      }
+
+      console.log(beginPeriod, endPeriod);
+    }
+
+    period.push(item);
+    period.sort((a, b) => {
+      if (a > b) return 1;
+      else if (a === b) return 0;
+      else if (a < b) return -1;
+    });
 
     startDatePeriod.value = item + '/' + (dateValue.getMonth() + 1) + '/' + dateValue.getFullYear();
 
-    td.classList.toggle("selectedTd");
+    td.classList.add('selectedTd');
+    console.log(period);
   }
 
   // ==========================================================================================================
@@ -90,7 +129,7 @@
       } else {
         td.innerText = item;
         td.addEventListener('click', () => {
-          setPeriod(item, dateValue, td, i);
+          setSelectedPeriod(item, dateValue, td, i);
         });
 
         if (item === currentDate.getDate() && dateValue.getMonth() === currentDate.getMonth()
@@ -238,14 +277,16 @@
       .querySelectorAll('.selectedTd')
       .forEach(item => item.classList.toggle('selectedTd'));
 
+    period.splice(0);
+
     startDatePeriod.value = endDatePeriod.value = '';
     startDatePeriod.ariaPlaceholder = endDatePeriod.ariaPlaceholder = 'не выбрано';
-
   }
 
   // ==========================================================================================================
   // ОСНОВНОЙ БЛОК
   // ==========================================================================================================
+  const period = [];
 
   // массив для формирования таблицы дней
   const daysOfMonth = Array(42).fill(0);
