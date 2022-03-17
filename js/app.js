@@ -53,53 +53,36 @@
   // ==========================================================================================================
   // формируем и отображаем выбранный период
   // ==========================================================================================================
-  function setSelectedPeriod(item, dateValue, td, i) {
-    const periodLength = period.length;
-
-    if (periodLength > 1) {
-      const beginPeriod = period[0];
-      const endPeriod = period[periodLength - 1];
-
-      if (item < beginPeriod || item > endPeriod) {
-        const node = tbodyNode.getElementsByTagName('td');
-
-        // console.log(node);
-
-
-        for (let i = 0; i < node.length; i++) {
-
-          if (node.item(i).className !== 'anotherPeriod') {
-            const index = node.item(i).innerHTML;
-
-            if (index >= beginPeriod && index <= endPeriod) {
-              node.item(i).classList.add('selectedTd');
-            }
-
-
-            // console.log(node.item(i).innerHTML);
-          }
-        }
-
-
-        // console.log('увеличение периода..');
-      } else {
-        // console.log('период остается прежним..');
-      }
-
-      console.log(beginPeriod, endPeriod);
-    }
-
+  function setSelectedPeriod(item, dateValue, td) {
     period.push(item);
     period.sort((a, b) => {
       if (a > b) return 1;
       else if (a === b) return 0;
-      else if (a < b) return -1;
+
+      return -1;
     });
 
-    startDatePeriod.value = item + '/' + (dateValue.getMonth() + 1) + '/' + dateValue.getFullYear();
+    const node = tbodyNode.getElementsByTagName('td');
+    const periodLength = period.length;
+    const beginPeriod = period[0];
+    const endPeriod = period[periodLength - 1];
+
+    if (periodLength > 1 && item >= beginPeriod || item <= endPeriod) {
+      for (let i = 0; i < node.length; i++) {
+        if (node.item(i).className !== 'anotherPeriod') {
+          const index = node.item(i).innerHTML;
+
+          if (index >= beginPeriod && index <= endPeriod) {
+            node.item(i).classList.add('selectedTd');
+          }
+        }
+      }
+    }
 
     td.classList.add('selectedTd');
-    console.log(period);
+
+    startDatePeriod.value = beginPeriod + '/' + (dateValue.getMonth() + 1) + '/' + dateValue.getFullYear();
+    endDatePeriod.value = endPeriod + '/' + (dateValue.getMonth() + 1) + '/' + dateValue.getFullYear();
   }
 
   // ==========================================================================================================
@@ -129,7 +112,7 @@
       } else {
         td.innerText = item;
         td.addEventListener('click', () => {
-          setSelectedPeriod(item, dateValue, td, i);
+          setSelectedPeriod(item, dateValue, td);
         });
 
         if (item === currentDate.getDate() && dateValue.getMonth() === currentDate.getMonth()
