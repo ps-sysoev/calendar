@@ -1,7 +1,10 @@
 @import "dropdown.css";
 
 body {
-  background: #e0e0e0;
+  background-image: url(../img/background1.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-color: #e0e0e0;
   font: 3.5em/1.5 "Helvetica Neue", Helvatica, Arial, san-serif;
   user-select: none;
 }

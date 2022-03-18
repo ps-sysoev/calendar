@@ -54,6 +54,8 @@
   // формируем и отображаем выбранный период
   // ==========================================================================================================
   function setSelectedPeriod(item, dateValue, td) {
+    // TODO- добавить проверку на повторяющийся элемент
+
     period.push(item);
     period.sort((a, b) => {
       if (a > b) return 1;
@@ -165,6 +167,8 @@
       selectedDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 1);
     } else if (clickedButton === 'dropdown') {
       selectedDate = new Date(Number(event.target.dataset.year), Number(event.target.dataset.month), 1);
+    } else if (clickedButton === 'today') {
+      selectedDate = new Date();
     }
 
     clearTable();
@@ -295,19 +299,21 @@
   // инициализация календаря
   createCalendar(selectedDate);
 
+  document.querySelector('.todayButton').addEventListener('click', setNewCalendarPeriod);
+
   // вешаем обработчик нажатия предыдущий/следующий период
   {
-    const leftButton = document.querySelector('.left');
-    leftButton.addEventListener('click', setNewCalendarPeriod);
+    document.querySelector('.left')
+      .addEventListener('click', setNewCalendarPeriod);
 
-    const rightButton = document.querySelector('.right');
-    rightButton.addEventListener('click', setNewCalendarPeriod);
+    document.querySelector('.right')
+      .addEventListener('click', setNewCalendarPeriod);
   }
 
   // меню dropdown
   {
-    const nodeDropdown = document.querySelector('.dropdown');
-    nodeDropdown.addEventListener('click', showDropdown);
+    document.querySelector('.dropdown')
+      .addEventListener('click', showDropdown);
 
     // закрыть раскрывающийся список, если пользователь кликнет за его пределами
     window.onclick = function (event) {
