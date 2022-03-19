@@ -51,40 +51,56 @@
   }
 
   // ==========================================================================================================
-  // формируем и отображаем выбранный период
+  // заполняем выбранный период
   // ==========================================================================================================
-  function setSelectedPeriod(item, dateValue, td) {
-    // TODO- добавить проверку на повторяющийся элемент
-
-    period.push(item);
-    period.sort((a, b) => {
-      if (a > b) return 1;
-      else if (a === b) return 0;
-
-      return -1;
-    });
-
+  function fillSelectedPeriod(period) {
     const node = tbodyNode.getElementsByTagName('td');
-    const periodLength = period.length;
     const beginPeriod = period[0];
-    const endPeriod = period[periodLength - 1];
+    const endPeriod = period[period.length - 1];
 
-    if (periodLength > 1 && item >= beginPeriod || item <= endPeriod) {
-      for (let i = 0; i < node.length; i++) {
-        if (node.item(i).className !== 'anotherPeriod') {
-          const index = node.item(i).innerHTML;
+    startDatePeriod.value = beginPeriod;
+    endDatePeriod.value = endPeriod;
 
-          if (index >= beginPeriod && index <= endPeriod) {
-            node.item(i).classList.add('selectedTd');
-          }
+    for (let i = 0; i < node.length; i++) {
+      if (node.item(i).className !== 'anotherPeriod') {
+        const index = node.item(i).innerHTML;
+
+        if (index >= Number(beginPeriod.slice(0, 2)) && index <= Number(endPeriod.slice(0, 2))) {
+          node.item(i).classList.add('selectedTd');
         }
       }
     }
+  }
 
-    td.classList.add('selectedTd');
+  // ==========================================================================================================
+  // формируем и отображаем выбранный период
+  // ==========================================================================================================
+  function setSelectedPeriod(item, dateValue) {
+    const periodItem = new Date(dateValue.getFullYear(), dateValue.getMonth(), item);
+    const periodItemToString = periodItem.toLocaleString('ru-RU', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
 
-    startDatePeriod.value = beginPeriod + '/' + (dateValue.getMonth() + 1) + '/' + dateValue.getFullYear();
-    endDatePeriod.value = endPeriod + '/' + (dateValue.getMonth() + 1) + '/' + dateValue.getFullYear();
+    if (!period.includes(periodItemToString)) {
+      if (period.length && periodItemToString.slice(3, 5) !== period[0].slice(3, 5)) {
+        return;
+      }
+
+      period.push(periodItemToString);
+      period.sort((a, b) => {
+        if (a > b) return 1;
+        else if (a === b) return 0;
+
+        return -1;
+      });
+
+      // если есть 1 и более элементов - это уже период:
+      if (period.length) {
+        fillSelectedPeriod(period);
+      }
+    }
   }
 
   // ==========================================================================================================
@@ -114,7 +130,7 @@
       } else {
         td.innerText = item;
         td.addEventListener('click', () => {
-          setSelectedPeriod(item, dateValue, td);
+          setSelectedPeriod(item, dateValue);
         });
 
         if (item === currentDate.getDate() && dateValue.getMonth() === currentDate.getMonth()
@@ -130,12 +146,16 @@
   // ==========================================================================================================
   // инициализация начального состояния календаря
   // ==========================================================================================================
-  function createCalendar(dateValue) {
+  function createCalendar(dateValue, isPeriod) {
     createCalendarTitle(dateValue);
 
     createCalendarDaysTable(dateValue);
 
     fillInCalendarDaysTable(dateValue);
+
+    if (isPeriod) {
+      fillSelectedPeriod(period);
+    }
   }
 
   // ==========================================================================================================
@@ -156,24 +176,39 @@
   }
 
   // ==========================================================================================================
+  // проверка выбранного периода для отрисовки
+  // ==========================================================================================================
+  function checkingPeriod(dateValue, period) {
+    return period.length && Number(period[0].slice(3, 5)) === selectedDate.getMonth() + 1 &&
+      Number(period[0].slice(6)) === selectedDate.getFullYear();
+  }
+
+  // ==========================================================================================================
   // установка нового периода календаря (предыдущий/следующий)
   // ==========================================================================================================
   function setNewCalendarPeriod(event) {
     const clickedButton = event.target.dataset.clickedButton;
+    let isPeriod = false;
 
     if (clickedButton === 'left') {
       selectedDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() - 1, 1);
+
+      isPeriod = checkingPeriod(selectedDate, period);
     } else if (clickedButton === 'right') {
       selectedDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 1);
+
+      isPeriod = checkingPeriod(selectedDate, period);
     } else if (clickedButton === 'dropdown') {
       selectedDate = new Date(Number(event.target.dataset.year), Number(event.target.dataset.month), 1);
     } else if (clickedButton === 'today') {
       selectedDate = new Date();
+
+      isPeriod = checkingPeriod(selectedDate, period);
     }
 
     clearTable();
 
-    createCalendar(selectedDate);
+    createCalendar(selectedDate, isPeriod);
   }
 
   // ==========================================================================================================
@@ -290,8 +325,7 @@
   const startDatePeriod = document.querySelector('.startDatePeriod');
   const endDatePeriod = document.querySelector('.endDatePeriod');
 
-  const clearingPeriod = document.querySelector('.clearingPeriod');
-  clearingPeriod.addEventListener('click', clearingSelectedPeriod);
+  document.querySelector('.clearingPeriod').addEventListener('click', clearingSelectedPeriod);
 
   // получаем текущую дату
   let selectedDate = new Date();
@@ -299,21 +333,19 @@
   // инициализация календаря
   createCalendar(selectedDate);
 
+  // конпка "Сегодня"
   document.querySelector('.todayButton').addEventListener('click', setNewCalendarPeriod);
 
   // вешаем обработчик нажатия предыдущий/следующий период
   {
-    document.querySelector('.left')
-      .addEventListener('click', setNewCalendarPeriod);
+    document.querySelector('.left').addEventListener('click', setNewCalendarPeriod);
 
-    document.querySelector('.right')
-      .addEventListener('click', setNewCalendarPeriod);
+    document.querySelector('.right').addEventListener('click', setNewCalendarPeriod);
   }
 
   // меню dropdown
   {
-    document.querySelector('.dropdown')
-      .addEventListener('click', showDropdown);
+    document.querySelector('.dropdown').addEventListener('click', showDropdown);
 
     // закрыть раскрывающийся список, если пользователь кликнет за его пределами
     window.onclick = function (event) {
