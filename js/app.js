@@ -1,40 +1,72 @@
 (function IIFE() {
-  // ==========================================================================================================
-  // формируем заголовок календаря
-  // ==========================================================================================================
-  function createCalendarTitle(dateValue) {
-    const optionsOfDate = {
-      year: 'numeric',
-      month: 'long'
-    };
+  // получаем текущую дату
+  let selectedDate = new Date();
 
-    const date = dateValue.toLocaleString('ru', optionsOfDate);
-    nodeMonthYear.innerText = date.replace(' г.', '');
+  const period = [];
+
+  // массив для формирования таблицы дней
+  const daysOfMonth = Array(42)
+    .fill(0);
+
+  // находим заголовок
+  const nodeMonthYear = document.querySelector('.monthYear');
+
+  // находим table
+  const nodeTable = document.querySelector('table');
+
+  // определяем table tbody
+  const tbodyNode = nodeTable.lastElementChild;
+
+  const startDatePeriod = document.querySelector('.startDatePeriod');
+  const endDatePeriod = document.querySelector('.endDatePeriod');
+
+  /**
+   * формируем заголовок календаря
+   * @param{Date} dateValue
+   */
+  function createCalendarTitle(dateValue) {
+    nodeMonthYear.innerText = dateValue
+      .toLocaleString('ru', {
+        year: 'numeric',
+        month: 'long',
+      })
+      .replace(' г.', '');
   }
 
-  // ==========================================================================================================
+  // ===============================================================================================
+  // определение количество дней в месяце
+  // ===============================================================================================
+  function getCountOfDaysInMonth(dateValue) {
+    return 33 - new Date(dateValue.getFullYear(), dateValue.getMonth(), 33).getDate();
+  }
+
+  // ===============================================================================================
   // формируем таблицу дней
-  // ==========================================================================================================
+  // ===============================================================================================
   function createCalendarDaysTable(dateValue) {
     // определяем количество дней в переданной дате selectedDate
     const numberOfDaysInMonth = getCountOfDaysInMonth(dateValue);
 
     // определяем первый день на неделе
-    const firstDayOfCurrentMonthInEnWeek = new Date(dateValue.getFullYear(), dateValue.getMonth(), 1).getDay() - 1;
-    const firstDayOfCurrentMonthInRuWeek = firstDayOfCurrentMonthInEnWeek < 0 ? 6 : firstDayOfCurrentMonthInEnWeek;
+    const firstDayOfCurrentMonthInEnWeek = new
+    Date(dateValue.getFullYear(), dateValue.getMonth(), 1).getDay() - 1;
+
+    const firstDayOfCurrentMonthInRuWeek = firstDayOfCurrentMonthInEnWeek < 0
+      ? 6 : firstDayOfCurrentMonthInEnWeek;
 
     // заполняем в daysOfMonth дни предыдущего периода
     {
       const tempDate = new Date(dateValue.getFullYear(), dateValue.getMonth() - 1, 1);
       const numberOfPreviousPeriod = getCountOfDaysInMonth(tempDate);
 
-      for (let i = 0; i < firstDayOfCurrentMonthInRuWeek; i++) {
-        daysOfMonth[i] = numberOfPreviousPeriod - firstDayOfCurrentMonthInRuWeek + 1 + i + '.';
+      for (let i = 0; i < firstDayOfCurrentMonthInRuWeek; i += 1) {
+        daysOfMonth[i] = `${numberOfPreviousPeriod - firstDayOfCurrentMonthInRuWeek + 1 + i}.`;
       }
     }
 
     // заполняем в daysOfMonth дни текущего периода
-    for (let i = firstDayOfCurrentMonthInRuWeek; i - firstDayOfCurrentMonthInRuWeek < numberOfDaysInMonth; i++) {
+    for (let i = firstDayOfCurrentMonthInRuWeek;
+      i - firstDayOfCurrentMonthInRuWeek < numberOfDaysInMonth; i += 1) {
       daysOfMonth[i] = i - firstDayOfCurrentMonthInRuWeek + 1;
     }
 
@@ -43,44 +75,49 @@
       let numberOfNextPeriod = 1;
 
       // '.' - используем как признак что это число не текущего периода
-      for (let i = firstDayOfCurrentMonthInRuWeek + numberOfDaysInMonth; i < daysOfMonth.length; i++) {
-        daysOfMonth[i] = numberOfNextPeriod + '.';
-        numberOfNextPeriod++;
+      for (let i = firstDayOfCurrentMonthInRuWeek + numberOfDaysInMonth;
+        i < daysOfMonth.length; i += 1) {
+        daysOfMonth[i] = `${numberOfNextPeriod}.`;
+        numberOfNextPeriod += 1;
       }
     }
   }
 
-  // ==========================================================================================================
+  // ===============================================================================================
   // заполняем выбранный период
-  // ==========================================================================================================
-  function fillSelectedPeriod(period) {
+  // ===============================================================================================
+  function fillSelectedPeriod(periodData) {
     const node = tbodyNode.getElementsByTagName('td');
-    const beginPeriod = period[0];
-    const endPeriod = period[period.length - 1];
+    const beginPeriod = periodData[0];
+    const endPeriod = periodData[periodData.length - 1];
 
     startDatePeriod.value = beginPeriod;
     endDatePeriod.value = endPeriod;
 
-    for (let i = 0; i < node.length; i++) {
+    for (let i = 0; i < node.length; i += 1) {
       if (node.item(i).className !== 'anotherPeriod') {
-        const index = node.item(i).innerHTML;
+        const itemDate = node.item(i).innerHTML;
+        const startValueOfPeriod = Number(beginPeriod.slice(0, 2));
+        const endValueOfPeriod = Number(endPeriod.slice(0, 2));
 
-        if (index >= Number(beginPeriod.slice(0, 2)) && index <= Number(endPeriod.slice(0, 2))) {
-          node.item(i).classList.add('selectedTd');
+        if (itemDate >= startValueOfPeriod && itemDate <= endValueOfPeriod) {
+          node.item(i)
+            .classList
+            .add('selectedTd');
         }
       }
     }
   }
 
-  // ==========================================================================================================
+  // ===============================================================================================
   // формируем и отображаем выбранный период
-  // ==========================================================================================================
+  // ===============================================================================================
   function setSelectedPeriod(item, dateValue) {
     const periodItem = new Date(dateValue.getFullYear(), dateValue.getMonth(), item);
     const periodItemToString = periodItem.toLocaleString('ru-RU', {
       day: '2-digit',
       month: '2-digit',
-      year: 'numeric'
+      year: 'numeric',
     });
 
     if (!period.includes(periodItemToString)) {
@@ -91,7 +128,7 @@
       period.push(periodItemToString);
       period.sort((a, b) => {
         if (a > b) return 1;
-        else if (a === b) return 0;
+        if (a === b) return 0;
 
         return -1;
       });
@@ -103,9 +140,9 @@
     }
   }
 
-  // ==========================================================================================================
+  // ===============================================================================================
   // заполняем таблицу дней
-  // ==========================================================================================================
+  // ===============================================================================================
   function fillInCalendarDaysTable(dateValue) {
     let tr;
     const countOfDaysInWeek = 7;
@@ -133,19 +170,20 @@
           setSelectedPeriod(item, dateValue);
         });
 
-        if (item === currentDate.getDate() && dateValue.getMonth() === currentDate.getMonth()
+        if (item === currentDate.getDate()
+          && dateValue.getMonth() === currentDate.getMonth()
           && dateValue.getFullYear() === currentDate.getFullYear()) {
           td.className = 'today';
         }
       }
 
       tr.appendChild(td);
-    })
+    });
   }
 
-  // ==========================================================================================================
+  // ===============================================================================================
   // инициализация начального состояния календаря
-  // ==========================================================================================================
+  // ===============================================================================================
   function createCalendar(dateValue, isPeriod) {
     createCalendarTitle(dateValue);
 
@@ -158,16 +196,9 @@
     }
   }
 
-  // ==========================================================================================================
-  // определение количество дней в месяце
-  // ==========================================================================================================
-  function getCountOfDaysInMonth(dateValue) {
-    return 33 - new Date(dateValue.getFullYear(), dateValue.getMonth(), 33).getDate();
-  }
-
-  // ==========================================================================================================
+  // ===============================================================================================
   // очистка таблицы дней
-  // ==========================================================================================================
+  // ===============================================================================================
   function clearTable() {
     // rows[0] это заголовок - оставляем
     while (nodeTable.rows[1]) {
@@ -175,34 +206,38 @@
     }
   }
 
-  // ==========================================================================================================
+  // ===============================================================================================
   // проверка выбранного периода для отрисовки
-  // ==========================================================================================================
-  function checkingPeriod(dateValue, period) {
-    return period.length && Number(period[0].slice(3, 5)) === selectedDate.getMonth() + 1 &&
-      Number(period[0].slice(6)) === selectedDate.getFullYear();
+  // ===============================================================================================
+  function checkingPeriod(dateValue, periodData) {
+    if (periodData.length) {
+      const month = Number(periodData[0].slice(3, 5));
+      const year = Number(periodData[0].slice(6));
+
+      return month === selectedDate.getMonth() + 1 && year === selectedDate.getFullYear();
+    }
+
+    return false;
   }
 
-  // ==========================================================================================================
+  // ===============================================================================================
   // установка нового периода календаря (предыдущий/следующий)
-  // ==========================================================================================================
+  // ===============================================================================================
   function setNewCalendarPeriod(event) {
-    const clickedButton = event.target.dataset.clickedButton;
+    const { buttonType } = event.target.dataset;
     let isPeriod = false;
 
-    if (clickedButton === 'left') {
+    if (buttonType === 'left') {
       selectedDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() - 1, 1);
-
       isPeriod = checkingPeriod(selectedDate, period);
-    } else if (clickedButton === 'right') {
+    } else if (buttonType === 'right') {
       selectedDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 1);
-
       isPeriod = checkingPeriod(selectedDate, period);
-    } else if (clickedButton === 'dropdown') {
-      selectedDate = new Date(Number(event.target.dataset.year), Number(event.target.dataset.month), 1);
-    } else if (clickedButton === 'today') {
+    } else if (buttonType === 'dropdown') {
+      const itemDropdown = event.target.dataset;
+      selectedDate = new Date(Number(itemDropdown.year), Number(itemDropdown.month), 1);
+    } else if (buttonType === 'today') {
       selectedDate = new Date();
-
       isPeriod = checkingPeriod(selectedDate, period);
     }
 
@@ -211,9 +246,9 @@
     createCalendar(selectedDate, isPeriod);
   }
 
-  // ==========================================================================================================
+  // ===============================================================================================
   // Выпадающий список Dropdown
-  // ==========================================================================================================
+  // ===============================================================================================
   function showDropdown() {
     const dateValue = selectedDate;
     const listOfMonthsAndYears = [];
@@ -225,33 +260,31 @@
       let monthNumber = currentMonthNumber;
       let yearNumber = currentYearNumber;
 
-      for (let i = 5; i <= numberOfMonths; i++, monthNumber++) {
+      for (let i = 5; i <= numberOfMonths; i += 1, monthNumber += 1) {
         if (monthNumber > numberOfMonths) {
           monthNumber = 0;
-          yearNumber++;
+          yearNumber += 1;
         }
 
-        listOfMonthsAndYears[i] =
-          {
-            month: monthNumber,
-            year: yearNumber
-          };
+        listOfMonthsAndYears[i] = {
+          month: monthNumber,
+          year: yearNumber,
+        };
       }
 
       monthNumber = currentMonthNumber - 1;
       yearNumber = currentYearNumber;
 
-      for (let i = 4; i >= 0; i--, monthNumber--) {
+      for (let i = 4; i >= 0; i -= 1, monthNumber -= 1) {
         if (monthNumber < 0) {
           monthNumber = numberOfMonths;
-          yearNumber--;
+          yearNumber -= 1;
         }
 
-        listOfMonthsAndYears[i] =
-          {
-            month: monthNumber,
-            year: yearNumber
-          };
+        listOfMonthsAndYears[i] = {
+          month: monthNumber,
+          year: yearNumber,
+        };
       }
     }
 
@@ -269,95 +302,76 @@
       nodeTagA.href = '#';
       nodeTagA.dataset.month = item.month;
       nodeTagA.dataset.year = item.year;
-      nodeTagA.innerHTML =
-        tempDate.toLocaleString('ru', {month: 'long'})
-          .replace(' г.', '')
-          .toUpperCase()
-        + ' ' + item.year;
+      nodeTagA.innerHTML = `${tempDate
+        .toLocaleString('ru', { month: 'long' })
+        .replace(' г.', '')
+        .toUpperCase()} ${item.year}`;
 
       if (item.month === currentMonthNumber && item.year === currentYearNumber) {
         nodeTagA.className = 'dropdownToday';
       } else {
-        nodeTagA.dataset.clickedButton = 'dropdown';
+        nodeTagA.dataset.buttonType = 'dropdown';
 
         nodeTagA.addEventListener('click', (event) => {
           setNewCalendarPeriod(event);
-        })
+        });
       }
 
       nodeDropdownContent.appendChild(nodeTagA);
     });
 
-    nodeDropdownContent.classList.toggle("show");
+    nodeDropdownContent.classList.toggle('show');
   }
 
-  // ==========================================================================================================
+  // ===============================================================================================
   // Очистка выбранного периода
-  // ==========================================================================================================
+  // ===============================================================================================
   function clearingSelectedPeriod() {
     document
       .querySelectorAll('.selectedTd')
-      .forEach(item => item.classList.toggle('selectedTd'));
+      .forEach((item) => item.classList.toggle('selectedTd'));
 
     period.splice(0);
 
-    startDatePeriod.value = endDatePeriod.value = '';
-    startDatePeriod.ariaPlaceholder = endDatePeriod.ariaPlaceholder = 'не выбрано';
+    startDatePeriod.value = '';
+    endDatePeriod.value = '';
+    startDatePeriod.placeholder = 'не выбрано';
+    endDatePeriod.placeholder = 'не выбрано';
   }
 
-  // ==========================================================================================================
-  // ОСНОВНОЙ БЛОК
-  // ==========================================================================================================
-  const period = [];
+  // ===============================================================================================
 
-  // массив для формирования таблицы дней
-  const daysOfMonth = Array(42).fill(0);
-
-  // находим заголовок
-  const nodeMonthYear = document.querySelector('.monthYear');
-
-  // находим table
-  const nodeTable = document.querySelector('table');
-
-  // определяем table tbody
-  const tbodyNode = nodeTable.lastElementChild;
-
-  const startDatePeriod = document.querySelector('.startDatePeriod');
-  const endDatePeriod = document.querySelector('.endDatePeriod');
-
-  document.querySelector('.clearingPeriod').addEventListener('click', clearingSelectedPeriod);
-
-  // получаем текущую дату
-  let selectedDate = new Date();
+  document.querySelector('.clearingPeriod')
+    .addEventListener('click', clearingSelectedPeriod);
 
   // инициализация календаря
   createCalendar(selectedDate);
 
   // конпка "Сегодня"
-  document.querySelector('.todayButton').addEventListener('click', setNewCalendarPeriod);
+  document.querySelector('.todayButton')
+    .addEventListener('click', setNewCalendarPeriod);
 
   // вешаем обработчик нажатия предыдущий/следующий период
-  {
-    document.querySelector('.left').addEventListener('click', setNewCalendarPeriod);
+  document.querySelector('.left')
+    .addEventListener('click', setNewCalendarPeriod);
 
-    document.querySelector('.right').addEventListener('click', setNewCalendarPeriod);
-  }
+  document.querySelector('.right')
+    .addEventListener('click', setNewCalendarPeriod);
 
   // меню dropdown
-  {
-    document.querySelector('.dropdown').addEventListener('click', showDropdown);
+  document.querySelector('.dropdown')
+    .addEventListener('click', showDropdown);
 
-    // закрыть раскрывающийся список, если пользователь кликнет за его пределами
-    window.onclick = function (event) {
-      //!nodeDropdown.contains(event.target)
+  // закрыть раскрывающийся список, если пользователь кликнет за его пределами
+  window.onclick = (event) => {
+    // !nodeDropdown.contains(event.target)
 
-      if (!event.target.matches('.dropButton')) {
-        const myDropdown = document.querySelector('.dropdown-content');
+    if (!event.target.matches('.dropButton')) {
+      const myDropdown = document.querySelector('.dropdown-content');
 
-        if (myDropdown.classList.contains('show')) {
-          myDropdown.classList.remove('show');
-        }
+      if (myDropdown.classList.contains('show')) {
+        myDropdown.classList.remove('show');
       }
     }
-  }
-})()
+  };
+}());
