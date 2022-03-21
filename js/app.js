@@ -229,15 +229,20 @@
 
     if (buttonType === 'left') {
       selectedDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() - 1, 1);
+
       isPeriod = checkingPeriod(selectedDate, period);
     } else if (buttonType === 'right') {
       selectedDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 1);
+
       isPeriod = checkingPeriod(selectedDate, period);
     } else if (buttonType === 'dropdown') {
       const itemDropdown = event.target.dataset;
       selectedDate = new Date(Number(itemDropdown.year), Number(itemDropdown.month), 1);
+
+      isPeriod = checkingPeriod(selectedDate, period);
     } else if (buttonType === 'today') {
       selectedDate = new Date();
+
       isPeriod = checkingPeriod(selectedDate, period);
     }
 
@@ -251,42 +256,23 @@
   // ===============================================================================================
   function showDropdown() {
     const dateValue = selectedDate;
-    const listOfMonthsAndYears = [];
     const currentMonthNumber = dateValue.getMonth();
     const currentYearNumber = dateValue.getFullYear();
-    const numberOfMonths = 11;
 
-    {
-      let monthNumber = currentMonthNumber;
-      let yearNumber = currentYearNumber;
+    const tempListOfMonthsAndYears = Array(13)
+      .fill(dateValue);
 
-      for (let i = 5; i <= numberOfMonths; i += 1, monthNumber += 1) {
-        if (monthNumber > numberOfMonths) {
-          monthNumber = 0;
-          yearNumber += 1;
-        }
+    const listOfMonthsAndYears = tempListOfMonthsAndYears.map((item, i) => {
+      const month = item.getMonth();
+      const newDate = new Date(item);
 
-        listOfMonthsAndYears[i] = {
-          month: monthNumber,
-          year: yearNumber,
-        };
-      }
+      newDate.setMonth(i + month + 6);
 
-      monthNumber = currentMonthNumber - 1;
-      yearNumber = currentYearNumber;
-
-      for (let i = 4; i >= 0; i -= 1, monthNumber -= 1) {
-        if (monthNumber < 0) {
-          monthNumber = numberOfMonths;
-          yearNumber -= 1;
-        }
-
-        listOfMonthsAndYears[i] = {
-          month: monthNumber,
-          year: yearNumber,
-        };
-      }
-    }
+      return {
+        month: newDate.getMonth(),
+        year: newDate.getFullYear() - 1,
+      };
+    });
 
     const nodeDropdownContent = document.querySelector('.dropdown-content');
 
@@ -300,8 +286,8 @@
 
       const nodeTagA = document.createElement('a');
       nodeTagA.href = '#';
-      nodeTagA.dataset.month = item.month;
-      nodeTagA.dataset.year = item.year;
+      nodeTagA.dataset.month = String(item.month);
+      nodeTagA.dataset.year = String(item.year);
       nodeTagA.innerHTML = `${tempDate
         .toLocaleString('ru', { month: 'long' })
         .replace(' г.', '')
