@@ -225,26 +225,19 @@
   // ===============================================================================================
   function setNewCalendarPeriod(event) {
     const { buttonType } = event.target.dataset;
-    let isPeriod = false;
 
     if (buttonType === 'left') {
       selectedDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() - 1, 1);
-
-      isPeriod = checkingPeriod(selectedDate, period);
     } else if (buttonType === 'right') {
       selectedDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 1);
-
-      isPeriod = checkingPeriod(selectedDate, period);
     } else if (buttonType === 'dropdown') {
       const itemDropdown = event.target.dataset;
       selectedDate = new Date(Number(itemDropdown.year), Number(itemDropdown.month), 1);
-
-      isPeriod = checkingPeriod(selectedDate, period);
     } else if (buttonType === 'today') {
       selectedDate = new Date();
-
-      isPeriod = checkingPeriod(selectedDate, period);
     }
+
+    const isPeriod = checkingPeriod(selectedDate, period);
 
     clearTable();
 
