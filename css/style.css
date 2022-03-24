@@ -1,12 +1,29 @@
 @import "dropdown.css";
 
 body {
+  font: 3.5em/1.5 "Helvetica Neue", Helvatica, Arial, san-serif;
+  user-select: none;
+}
+
+body::after {
   background-image: url(../img/background1.png);
   background-repeat: no-repeat;
   background-size: cover;
   background-color: #e0e0e0;
-  font: 3.5em/1.5 "Helvetica Neue", Helvatica, Arial, san-serif;
-  user-select: none;
+  opacity: 0;
+  content: attr(data-el);
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
+  transition-property: opacity;
+  transition-duration: 4s;
+}
+
+.changeOpacity:after {
+  opacity: 1;
 }
 
 .parent {

@@ -1,4 +1,10 @@
 (function IIFE() {
+  const nodeBody = document.querySelector('body');
+
+  setTimeout(() => {
+    nodeBody.classList.add('changeOpacity');
+  }, 500);
+
   // получаем текущую дату
   let selectedDate = new Date();
 
