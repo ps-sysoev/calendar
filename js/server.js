@@ -1,11 +1,12 @@
 const express = require('express');
+const path = require('path');
 
 const app = express();
 const port = 5000;
 
 const routers = require('./routes');
 
-app.use(express.static('e:\\progr\\calendar'));
+app.use(express.static(path.resolve(__dirname, '../public')));
 
 routers(app);
 

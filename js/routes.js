@@ -1,7 +1,7 @@
 const router = (app) => {
-  app.get('/', (request, response) => {
+  app.get('/old', (request, response) => {
     response.status(200)
-      .type('text/plain');
+      .type('text/html');
     response.sendfile('index.html');
   });
 
