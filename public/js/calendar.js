@@ -176,9 +176,11 @@
           setSelectedPeriod(item, dateValue);
         });
 
-        if (item === currentDate.getDate()
+        if (
+          item === currentDate.getDate()
           && dateValue.getMonth() === currentDate.getMonth()
-          && dateValue.getFullYear() === currentDate.getFullYear()) {
+          && dateValue.getFullYear() === currentDate.getFullYear()
+        ) {
           td.className = 'today';
         }
       }
@@ -216,14 +218,14 @@
   // проверка выбранного периода для отрисовки
   // ===============================================================================================
   function checkingPeriod(dateValue, periodData) {
-    if (periodData.length) {
-      const month = Number(periodData[0].slice(3, 5));
-      const year = Number(periodData[0].slice(6));
-
-      return month === selectedDate.getMonth() + 1 && year === selectedDate.getFullYear();
+    if (!periodData.length) {
+      return false;
     }
 
-    return false;
+    const month = Number(periodData[0].slice(3, 5));
+    const year = Number(periodData[0].slice(6));
+
+    return month === selectedDate.getMonth() + 1 && year === selectedDate.getFullYear();
   }
 
   // ===============================================================================================
@@ -232,15 +234,21 @@
   function setNewCalendarPeriod(event) {
     const { buttonType } = event.target.dataset;
 
-    if (buttonType === 'left') {
-      selectedDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() - 1, 1);
-    } else if (buttonType === 'right') {
-      selectedDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 1);
-    } else if (buttonType === 'dropdown') {
-      const itemDropdown = event.target.dataset;
-      selectedDate = new Date(Number(itemDropdown.year), Number(itemDropdown.month), 1);
-    } else if (buttonType === 'today') {
-      selectedDate = new Date();
+    switch (buttonType) {
+      case 'left':
+        selectedDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() - 1, 1);
+        break;
+      case 'right':
+        selectedDate = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 1);
+        break;
+      case 'dropdown':
+        // eslint-disable-next-line no-case-declarations
+        const itemDropdown = event.target.dataset;
+        selectedDate = new Date(Number(itemDropdown.year), Number(itemDropdown.month), 1);
+        break;
+      default:
+        selectedDate = new Date();
+        break;
     }
 
     const isPeriod = checkingPeriod(selectedDate, period);
@@ -333,8 +341,10 @@
   createCalendar(selectedDate);
 
   // конпка "Сегодня"
-  document.querySelector('.todayButton')
-    .addEventListener('click', setNewCalendarPeriod);
+  const nodeTodayButton = document.querySelector('.todayButton');
+  if (nodeTodayButton !== null) {
+    nodeTodayButton.addEventListener('click', setNewCalendarPeriod);
+  }
 
   // вешаем обработчик нажатия предыдущий/следующий период
   document.querySelector('.left')
@@ -349,14 +359,11 @@
 
   // закрыть раскрывающийся список, если пользователь кликнет за его пределами
   window.onclick = (event) => {
-    // !nodeDropdown.contains(event.target)
-
     if (!event.target.matches('.dropButton')) {
-      const myDropdown = document.querySelector('.dropdown-content');
-
-      if (myDropdown.classList.contains('show')) {
-        myDropdown.classList.remove('show');
-      }
+      document
+        .querySelector('.dropdown-content')
+        .classList
+        .remove('show');
     }
   };
 }());
