@@ -353,6 +353,17 @@
   }
 
   // ===============================================================================================
+  // Закрыть раскрывающийся список, если пользователь кликнет за его пределами
+  // ===============================================================================================
+  function clickOutsideOfDropdown(event) {
+    if (!event.target.matches('.dropButton')) {
+      document
+        .querySelector('.dropdown-content')
+        .classList
+        .remove('show');
+    }
+  }
+  // ===============================================================================================
 
   document.querySelector('.clearingPeriod')
     .addEventListener('click', clearingSelectedPeriod);
@@ -377,13 +388,5 @@
   document.querySelector('.dropdown')
     .addEventListener('click', showDropdown);
 
-  // закрыть раскрывающийся список, если пользователь кликнет за его пределами
-  window.onclick = (event) => {
-    if (!event.target.matches('.dropButton')) {
-      document
-        .querySelector('.dropdown-content')
-        .classList
-        .remove('show');
-    }
-  };
+  window.addEventListener('click', clickOutsideOfDropdown);
 }());
