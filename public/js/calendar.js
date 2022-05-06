@@ -107,6 +107,10 @@
         const endValueOfPeriod = Number(endPeriod.slice(0, 2));
 
         if (itemDate >= startValueOfPeriod && itemDate <= endValueOfPeriod) {
+          if (node.item(i).classList.contains('today')) {
+            node.item(i).classList.toggle('today');
+          }
+
           node.item(i)
             .classList
             .add('selectedTd');
@@ -320,9 +324,23 @@
   // Очистка выбранного периода
   // ===============================================================================================
   function clearingSelectedPeriod() {
+    const currentDate = new Date();
+    const startDatePeriodMonth = Number(startDatePeriod.value.slice(3, 5));
+    const startDatePeriodYear = Number(startDatePeriod.value.slice(6));
+
     document
       .querySelectorAll('.selectedTd')
-      .forEach((item) => item.classList.toggle('selectedTd'));
+      .forEach((item) => {
+        item.classList.toggle('selectedTd');
+
+        if (
+          currentDate.getDate() === Number(item.innerHTML)
+          && currentDate.getMonth() + 1 === startDatePeriodMonth
+          && currentDate.getFullYear() === startDatePeriodYear
+        ) {
+          item.classList.toggle('today');
+        }
+      });
 
     period.splice(0);
 
