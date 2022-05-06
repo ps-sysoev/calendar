@@ -120,6 +120,36 @@
   }
 
   // ===============================================================================================
+  // Очистка выбранного периода
+  // ===============================================================================================
+  function clearingSelectedPeriod() {
+    const currentDate = new Date();
+    const startDatePeriodMonth = Number(startDatePeriod.value.slice(3, 5));
+    const startDatePeriodYear = Number(startDatePeriod.value.slice(6));
+
+    document
+      .querySelectorAll('.selectedTd')
+      .forEach((item) => {
+        item.classList.toggle('selectedTd');
+
+        if (
+          currentDate.getDate() === Number(item.innerHTML)
+          && currentDate.getMonth() + 1 === startDatePeriodMonth
+          && currentDate.getFullYear() === startDatePeriodYear
+        ) {
+          item.classList.toggle('today');
+        }
+      });
+
+    period.splice(0);
+
+    startDatePeriod.value = '';
+    endDatePeriod.value = '';
+    startDatePeriod.placeholder = 'не выбрано';
+    endDatePeriod.placeholder = 'не выбрано';
+  }
+
+  // ===============================================================================================
   // формируем и отображаем выбранный период
   // ===============================================================================================
   function setSelectedPeriod(item, dateValue) {
@@ -143,9 +173,11 @@
         return -1;
       });
 
-      // если есть 1 и более элементов - это уже период:
-      if (period.length) {
+      // если есть 1 или 2 элемента - это период, иначе сброс выбранного периода:
+      if (period.length <= 2) {
         fillSelectedPeriod(period);
+      } else {
+        clearingSelectedPeriod();
       }
     }
   }
@@ -318,36 +350,6 @@
     });
 
     nodeDropdownContent.classList.toggle('show');
-  }
-
-  // ===============================================================================================
-  // Очистка выбранного периода
-  // ===============================================================================================
-  function clearingSelectedPeriod() {
-    const currentDate = new Date();
-    const startDatePeriodMonth = Number(startDatePeriod.value.slice(3, 5));
-    const startDatePeriodYear = Number(startDatePeriod.value.slice(6));
-
-    document
-      .querySelectorAll('.selectedTd')
-      .forEach((item) => {
-        item.classList.toggle('selectedTd');
-
-        if (
-          currentDate.getDate() === Number(item.innerHTML)
-          && currentDate.getMonth() + 1 === startDatePeriodMonth
-          && currentDate.getFullYear() === startDatePeriodYear
-        ) {
-          item.classList.toggle('today');
-        }
-      });
-
-    period.splice(0);
-
-    startDatePeriod.value = '';
-    endDatePeriod.value = '';
-    startDatePeriod.placeholder = 'не выбрано';
-    endDatePeriod.placeholder = 'не выбрано';
   }
 
   // ===============================================================================================
