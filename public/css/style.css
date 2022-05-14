@@ -36,8 +36,6 @@ body::after {
 }
 
 .calendar {
-  /*-moz-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.25);*/
-  /*-webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.25);*/
   box-shadow: 0 3px 3px rgba(0, 0, 0, 0.25);
   display: inline-block;
   width: 550px;
@@ -54,10 +52,6 @@ body::after {
   height: auto;
   position: relative;
   color: #fff;
-  /*-webkit-border-top-left-radius: 7px;*/
-  /*-webkit-border-top-right-radius: 7px;*/
-  /*-moz-border-radius-topleft: 7px;*/
-  /*-moz-border-radius-topright: 7px;*/
   border-top-left-radius: 7px;
   border-top-right-radius: 7px;
   font-weight: bold;
@@ -75,8 +69,6 @@ body::after {
 }
 
 .left {
-  /*-webkit-border-top-left-radius: 7px;*/
-  /*-moz-border-radius-topleft: 7px;*/
   border-top-left-radius: 7px;
 }
 
@@ -86,8 +78,6 @@ body::after {
 }
 
 .right {
-  /*-webkit-border-top-right-radius: 7px;*/
-  /*-moz-border-radius-topright: 7px;*/
   border-top-right-radius: 7px;
 }
 
@@ -128,8 +118,6 @@ body::after {
 .calendarGridDays td.today {
   background: #e0dede;
   box-shadow: 1px 1px 0 #fff inset;
-  /*-moz-box-shadow: 1px 1px 0 #fff inset;*/
-  /*-webkit-box-shadow: 1px 1px 0 #fff inset;*/
 }
 
 .calendarGridDays td:not(.anotherPeriod):hover {
@@ -137,8 +125,6 @@ body::after {
   text-shadow: #05560a 0 -1px;
   background: linear-gradient(#05560a, #18af20);
   box-shadow: 0 0 0;
-  /*-moz-box-shadow: 0 0 0;*/
-  /*-webkit-box-shadow: 0 0 0;*/
 }
 
 .calendarGridDays tbody tr:nth-child(odd) {

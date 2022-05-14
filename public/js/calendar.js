@@ -160,26 +160,23 @@
       year: 'numeric',
     });
 
-    if (!period.includes(periodItemToString)) {
-      if (period.length && periodItemToString.slice(3, 5) !== period[0].slice(3, 5)) {
-        return;
-      }
-
-      period.push(periodItemToString);
-      period.sort((a, b) => {
-        if (a > b) return 1;
-        if (a === b) return 0;
-
-        return -1;
-      });
-
-      // если есть 1 или 2 элемента - это период, иначе сброс выбранного периода:
-      if (period.length <= 2) {
-        fillSelectedPeriod(period);
-      } else {
-        clearingSelectedPeriod();
-      }
+    if (period.length && periodItemToString.slice(3, 5) !== period[0].slice(3, 5)) {
+      return;
     }
+
+    if (period.length >= 2) {
+      clearingSelectedPeriod();
+    }
+
+    period.push(periodItemToString);
+    period.sort((a, b) => {
+      if (a > b) return 1;
+      if (a === b) return 0;
+
+      return -1;
+    });
+
+    fillSelectedPeriod(period);
   }
 
   // ===============================================================================================
