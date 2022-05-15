@@ -1,0 +1,21 @@
+App
+- Layout (вся логика с позиционированием на странице)
+-- Background (вся логика с картинкой и бэкграундом)
+-- Calendar (все что есть в календаре, какие-то корневые значения для стейта)
+---- CalendarHeader
+------ RightMonthButton
+--------- MonthButton
+------ MonthSelector
+-------- MonthValue
+-------- MonthDropdown
+---------- MonthDropdownItem x13
+------ LeftMonthButton
+--------- MonthButton
+---- WeekDayNames
+------ WeekDayName x7
+-------- Cell
+---- Week x5
+------ Cell x7
+---- Footer
+------ PeriodValue
+------ TodaySelector
