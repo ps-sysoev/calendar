@@ -65,3 +65,12 @@ const CalendarHeader = () => {
 }
 ```
 
+ ##Папки
+
+- public
+  - css
+- src
+  - components
+    - файлы компонентов
+  - context
+    - файлы контекстов
