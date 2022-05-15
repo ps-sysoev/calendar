@@ -1,21 +1,21 @@
 App
 - Layout (вся логика с позиционированием на странице)
 -- Background (вся логика с картинкой и бэкграундом)
--- Calendar (все что есть в календаре, какие-то корневые значения для стейта)
----- CalendarHeader
+-- Calendar (все что есть в календаре, какие-то корневые значения для стейта, реакт-контекст)
+---- CalendarHeader (логика выбора месяца)
 ------ RightMonthButton
 --------- MonthButton
------- MonthSelector
+------ MonthSelector (логика выбора месяца через дропдаун)
 -------- MonthValue
 -------- MonthDropdown
 ---------- MonthDropdownItem x13
 ------ LeftMonthButton
 --------- MonthButton
----- WeekDayNames
+---- WeekDayNames (заголовок календаря, дни недели)
 ------ WeekDayName x7
 -------- Cell
----- Week x5
+---- Week x5 (пять недель для заполнения)
 ------ Cell x7
----- Footer
+---- Footer (то что идет за каледарем)
 ------ PeriodValue
 ------ TodaySelector
