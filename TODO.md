@@ -18,7 +18,7 @@
     - CalendarDays
       - Week x5 (пять недель для заполнения)
         - Cell x7
-    - Footer (то что идет за каледарем)
+    - Footer (то что идет за календарем)
       - PeriodValue
       - TodaySelector
 
