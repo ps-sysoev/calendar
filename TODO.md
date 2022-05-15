@@ -63,6 +63,22 @@ const CalendarHeader = () => {
   const { month } = React.useContext(CaledarContext);
   // ...
 }
+
+const MonthDropdown = () => {
+  const months = [1,2,3];
+  return months.map(id => (
+    <MonthDropdownItem key={id} monthId={id} />
+  ));
+}
+
+const MonthDropdownItem = ({ monthId }) => {
+  const { month } = React.useContext(CaledarContext);
+  return (
+    <div className={monthId === month ? 'active' : ''}>
+      {monthId}
+    </div>
+  )
+}
 ```
 
  ##Папки
